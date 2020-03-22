@@ -2,12 +2,11 @@ version: '2.2'
 services:
   es01:
     image: {docker-image}
-    container_name: es01
     environment:
       - node.name=es01
       - cluster.name=es-docker-cluster
       - discovery.seed_hosts=es02,es03
-      - cluster.initial_master_nodes=es01,es02,es03
+      - cluster.initial_master_nodes=es01,es02
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
@@ -22,13 +21,13 @@ services:
       - elastic
   es02:
     image: {docker-image}
-    container_name: es02
     environment:
       - node.name=es02
       - cluster.name=es-docker-cluster
       - discovery.seed_hosts=es01,es03
-      - cluster.initial_master_nodes=es01,es02,es03
+      - cluster.initial_master_nodes=es01,es02
       - bootstrap.memory_lock=true
+      - node.max_local_storage_nodes=5
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
       memlock:
@@ -40,13 +39,13 @@ services:
       - elastic
   es03:
     image: {docker-image}
-    container_name: es03
     environment:
       - node.name=es03
       - cluster.name=es-docker-cluster
       - discovery.seed_hosts=es01,es02
-      - cluster.initial_master_nodes=es01,es02,es03
+      - cluster.initial_master_nodes=es01,es02
       - bootstrap.memory_lock=true
+      - node.max_local_storage_nodes=5
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
       memlock:
