@@ -22,8 +22,8 @@ pipeline {
                     sh './gradlew assemble'
                     sh 'if [ -d deploy ]; then rm -Rf deploy; fi'
                     sh 'mkdir deploy'
-                    sh 'cp docs/reference/setup/install/docker-compose.yml deploy/'
-                    sh 'cp -r /var/lib/jenkins/workspace/elasticsearch_tp2/distribution/docker/build/docker/* deploy/'
+                    sh 'cp docs/reference/setup/install/docker-compose.yml ./deploy/'
+                    sh 'cp -r /var/lib/jenkins/workspace/elasticsearch_tp2/elasticsearch-7.6/distribution/docker/build/docker/* ./deploy/'
                 }
             }
         }
