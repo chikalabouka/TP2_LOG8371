@@ -1,0 +1,43 @@
+pipeline {
+    agent any
+    stages("elastic search pipline") {
+        stage('Checkout the project to version $VERSION') { 
+            steps {
+                git branch: 'master', changelog: false, credentialsId: 'GIT_CREDENTIALS', url: 'https://github.com/chikalabouka/TP2_LOG8371.git' 
+            }
+        }
+        stage ('Build and test elastic search chosen modules') {
+            steps {
+                dir('elasticsearch-7.6') {
+                    sh './gradlew :modules:ingest-user-agent:cleanTest :modules:ingest-user-agent:test'
+                    sh './gradlew :modules:ingest-geoip:cleanTest :modules:ingest-geoip:test'
+                    sh './gradlew :modules:systemd:cleanTest :modules:systemd:test'
+                    sh './gradlew :modules:transport-netty4:cleanTest :modules:transport-netty4:test'
+                }
+            }
+        }
+        stage ('Prepare deployment artefacts') {
+            steps {
+                dir('elasticsearch-7.6') {
+                    sh './gradlew assemble'
+                    sh 'if [ -d deploy ]; then rm -Rf deploy; fi'
+                    sh 'mkdir deploy'
+                    sh 'cp docs/reference/setup/install/docker-compose.yml deploy/'
+                    sh 'cp -r /var/lib/jenkins/workspace/elasticsearch_tp2/distribution/docker/build/docker/* deploy/'
+                }
+            }
+        }
+
+        stage ('Deploy elastic search') {
+            steps {
+                dir('elasticsearch-7.6') {
+                    dir('deploy') {
+                        sh 'docker build -t elastic-self-image .'
+                        sh 'sed -i "s/{docker-image}/elastic-self-image/g" docker-compose.yml'
+                        sh 'docker-compose up -d'
+                    }
+                }
+            }
+        }
+    }
+}
