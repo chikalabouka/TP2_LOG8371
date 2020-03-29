@@ -1,7 +1,7 @@
 version: '2.2'
 services:
   es01:
-    image: {docker-image}
+    image: elastic-jp-jm-image
     environment:
       - node.name=es01
       - cluster.name=es-docker-cluster
@@ -20,7 +20,7 @@ services:
     networks:
       - elastic
   es02:
-    image: {docker-image}
+    image: elastic-jp-jm-image
     environment:
       - node.name=es02
       - cluster.name=es-docker-cluster
@@ -38,7 +38,7 @@ services:
     networks:
       - elastic
   es03:
-    image: {docker-image}
+    image: elastic-jp-jm-image
     environment:
       - node.name=es03
       - cluster.name=es-docker-cluster
