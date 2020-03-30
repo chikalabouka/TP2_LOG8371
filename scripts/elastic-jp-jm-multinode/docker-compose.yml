@@ -1,7 +1,7 @@
 version: '2.2'
 services:
   es01:
-    image: elastic-jp-jm-image
+    image: {docker-image}
     environment:
       - node.name=es01
       - cluster.name=es-docker-cluster
@@ -13,6 +13,14 @@ services:
       memlock:
         soft: -1
         hard: -1
+
+    mem_limit: 1200m
+    cpu_count: 2
+    cpu_percent: 80
+    cpus: 1.6
+    cpu_shares: 73
+    cpuset: "0-3"
+
     volumes:
       - data01:/usr/share/elasticsearch/data
     ports:
@@ -20,7 +28,7 @@ services:
     networks:
       - elastic
   es02:
-    image: elastic-jp-jm-image
+    image: {docker-image}
     environment:
       - node.name=es02
       - cluster.name=es-docker-cluster
@@ -33,12 +41,20 @@ services:
       memlock:
         soft: -1
         hard: -1
+
+    mem_limit: 1200m
+    cpu_count: 2
+    cpu_percent: 80
+    cpus: 1.6
+    cpu_shares: 73
+    cpuset: "0-3"
+
     volumes:
       - data02:/usr/share/elasticsearch/data
     networks:
       - elastic
   es03:
-    image: elastic-jp-jm-image
+    image: {docker-image}
     environment:
       - node.name=es03
       - cluster.name=es-docker-cluster
@@ -51,6 +67,14 @@ services:
       memlock:
         soft: -1
         hard: -1
+
+    mem_limit: 1200m
+    cpu_count: 2
+    cpu_percent: 80
+    cpus: 1.6
+    cpu_shares: 73
+    cpuset: "0-3"
+
     volumes:
       - data03:/usr/share/elasticsearch/data    
     networks:
