@@ -22,19 +22,19 @@ pipeline {
                     sh './gradlew assemble'
                     sh 'if [ -d deploy ]; then rm -Rf deploy; fi'
                     sh 'mkdir deploy'
-                    sh 'cp docs/reference/setup/install/docker-compose.yml ./deploy/'
+                    sh 'cp ../scripts/elastic-jp-jm-multinode/docker-compose.yml ./deploy/'
                     sh 'cp -r /var/lib/jenkins/workspace/elasticsearch_tp2/elasticsearch-7.6/distribution/docker/build/docker/* ./deploy/'
                 }
             }
         }
 
-        stage ('Deploy elastic search') {
+        stage ('Deploy elastic search in docker') {
             steps {
                 dir('elasticsearch-7.6') {
                     dir('deploy') {
                         sh 'docker build -t elastic-self-image .'
                         sh 'sed -i "s/{docker-image}/elastic-self-image/g" docker-compose.yml'
-                        sh 'docker-compose up -d'
+                        sh 'docker-compose up -d es01 es02'
                     }
                 }
             }
